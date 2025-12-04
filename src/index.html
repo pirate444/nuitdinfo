@@ -3,92 +3,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIRD - Ubuntu Desktop Simulation</title>
+    <title>NIRD - Ubuntu Noble Numbat Desktop</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <!-- Taskbar -->
-    <div class="taskbar">
-        <div class="taskbar-left">
-            <button class="taskbar-btn active" id="btn-activities">Activities</button>
+    <!-- Top Panel -->
+    <div class="top-panel">
+        <div class="panel-left">
+            <button class="activities-btn" id="btn-activities">
+                <span class="ubuntu-logo">🟠</span> Activités
+            </button>
         </div>
-        <div class="taskbar-center">
-            <span class="time" id="time"></span>
+        <div class="panel-center">
+            <span class="panel-date" id="panel-date"></span>
         </div>
-        <div class="taskbar-right">
-            <div class="system-icons">
-                <span class="icon">🔊</span>
-                <span class="icon">🔋</span>
-                <span class="icon">📡</span>
+        <div class="panel-right">
+            <button class="system-btn">📶</button>
+            <button class="system-btn">🔊</button>
+            <button class="system-btn">🔋</button>
+            <button class="system-btn" id="user-menu">👤</button>
+        </div>
+    </div>
+
+    <!-- Activities Overview -->
+    <div class="activities-overview" id="activities-overview">
+        <input type="text" class="activities-search" placeholder="Rechercher une application..." id="activities-search">
+        <div class="activities-grid" id="activities-grid">
+            <div class="activity-card" data-app="files">
+                <div class="activity-card-icon">📁</div>
+                <div class="activity-card-title">Fichiers</div>
+            </div>
+            <div class="activity-card" data-app="terminal">
+                <div class="activity-card-icon">⌨️</div>
+                <div class="activity-card-title">Terminal</div>
+            </div>
+            <div class="activity-card" data-app="browser">
+                <div class="activity-card-icon">🌐</div>
+                <div class="activity-card-title">Firefox</div>
+            </div>
+            <div class="activity-card" data-app="nird">
+                <div class="activity-card-icon">🎨</div>
+                <div class="activity-card-title">Projet NIRD</div>
+            </div>
+            <div class="activity-card" data-app="quiz">
+                <div class="activity-card-icon">🧩</div>
+                <div class="activity-card-title">Quiz NIRD</div>
+            </div>
+            <div class="activity-card" data-app="scenario">
+                <div class="activity-card-icon">🎯</div>
+                <div class="activity-card-title">Scénarios</div>
+            </div>
+            <div class="activity-card" data-app="settings">
+                <div class="activity-card-icon">⚙️</div>
+                <div class="activity-card-title">Paramètres</div>
+            </div>
+            <div class="activity-card" data-app="calculator">
+                <div class="activity-card-icon">🔢</div>
+                <div class="activity-card-title">Calculatrice</div>
             </div>
         </div>
     </div>
 
     <!-- Desktop -->
     <div class="desktop">
-        <!-- Left Sidebar (Dock) -->
-        <div class="dock">
-            <div class="dock-item" title="Files">
+        <!-- Sidebar Dock -->
+        <div class="sidebar-dock">
+            <button class="dock-item active" title="Files" data-app="files">
                 <span>📁</span>
-            </div>
-            <div class="dock-item" title="Terminal">
+            </button>
+            <button class="dock-item" title="Terminal" data-app="terminal">
                 <span>⌨️</span>
-            </div>
-            <div class="dock-item" title="Browser">
+            </button>
+            <button class="dock-item" title="Firefox" data-app="browser">
                 <span>🌐</span>
-            </div>
-            <div class="dock-item" title="NIRD App">
+            </button>
+            <button class="dock-item" title="NIRD" data-app="nird">
                 <span>🎨</span>
-            </div>
+            </button>
+            <button class="dock-item" title="Quiz NIRD" data-app="quiz">
+                <span>🧩</span>
+            </button>
+            <button class="dock-item" title="Scénarios" data-app="scenario">
+                <span>🎯</span>
+            </button>
+            <div class="dock-separator"></div>
+            <button class="dock-item" title="Paramètres" data-app="settings">
+                <span>⚙️</span>
+            </button>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="desktop-content">
-            <h1 class="desktop-title">NIRD - Numérique Inclusif, Responsable et Durable</h1>
-            
-            <!-- Window Container -->
-            <div class="window" id="main-window">
-                <div class="window-header">
-                    <div class="window-title">NIRD Project</div>
-                    <div class="window-controls">
-                        <button class="window-btn minimize">−</button>
-                        <button class="window-btn maximize">☐</button>
-                        <button class="window-btn close">✕</button>
+        <!-- Main Desktop Content -->
+        <div class="desktop-main">
+            <!-- Desktop Icons -->
+            <div class="desktop-icons">
+                <div class="desktop-icon" draggable="true" data-open="readme">
+                    <div class="icon-image">📄</div>
+                    <div class="icon-label">README.txt</div>
+                </div>
+                <div class="desktop-icon" draggable="true" data-open="nird">
+                    <div class="icon-image">📁</div>
+                    <div class="icon-label">Dossier NIRD</div>
+                </div>
+                <div class="desktop-icon" draggable="true" data-open="quiz">
+                    <div class="icon-image">🧩</div>
+                    <div class="icon-label">Quiz NIRD</div>
+                </div>
+            </div>
+
+            <!-- Windows Container -->
+            <div class="windows-container">
+                <!-- Main NIRD Window -->
+                <div class="window active" id="nird-window">
+                    <div class="window-header">
+                        <div class="window-title">Projet NIRD</div>
+                        <div class="window-controls">
+                            <button class="window-btn minimize" title="Réduire">_</button>
+                            <button class="window-btn maximize" title="Agrandir">□</button>
+                            <button class="window-btn close" title="Fermer">✕</button>
+                        </div>
+                    </div>
+                    
+                    <div class="window-content">
+                        <div class="window-tabs">
+                            <button class="window-tab active" data-tab="overview">Accueil</button>
+                            <button class="window-tab" data-tab="challenge">Défi</button>
+                            <button class="window-tab" data-tab="pillars">Les 3 Piliers</button>
+                            <button class="window-tab" data-tab="comparison">Comparaison</button>
+                            <button class="window-tab" data-tab="resources">Ressources</button>
+                            <button class="window-tab" data-tab="about">À propos</button>
+                        </div>
+
+                        <div class="tab-panels">
+                            <div class="tab-panel active" id="overview">
+                                <div class="welcome-section">
+                                    <h2>Bienvenue dans NIRD</h2>
+                                    <p class="subtitle">Numérique Inclusif, Responsable et Durable</p>
+                                    <div class="welcome-content">
+                                        <p>Face au "Goliath numérique", les établissements scolaires peuvent devenir des <strong>villages résistants, ingénieux, autonomes et créatifs</strong>, à l'image du célèbre village d'Astérix.</p>
+                                        <p>L'approche NIRD vise à aider les établissements à adopter progressivement un numérique <strong>inclusif, responsable et durable</strong> en renforçant l'autonomie technologique des équipes éducatives.</p>
+                                    </div>
+                                    <div class="progress-display">
+                                        <div class="progress-info">
+                                            <span class="progress-label">Votre progression</span>
+                                            <span class="progress-value" id="progress-value">0%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" id="progress-fill"></div>
+                                        </div>
+                                        <div class="achievements-preview" id="achievements-preview"></div>
+                                    </div>
+                                    <div class="welcome-actions">
+                                        <button class="btn btn-primary" id="start-journey">Commencer le parcours</button>
+                                        <button class="btn btn-secondary" id="open-quiz">Faire le quiz</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-panel" id="challenge">
+                                <h2>Le Défi : Réduire les Dépendances Numériques</h2>
+                                <div class="challenge-intro">
+                                    <p>Avec la fin du support de Windows 10, les établissements scolaires font face à :</p>
+                                    <div class="problem-list">
+                                        <div class="problem-item">
+                                            <span class="problem-icon">💻</span>
+                                            <div>
+                                                <strong>Équipements obsolètes mais fonctionnels</strong>
+                                                <p>Des ordinateurs encore utilisables mais non supportés</p>
+                                            </div>
+                                        </div>
+                                        <div class="problem-item">
+                                            <span class="problem-icon">💰</span>
+                                            <div>
+                                                <strong>Licences coûteuses et stockage hors UE</strong>
+                                                <p>Dépendance financière et souveraineté des données</p>
+                                            </div>
+                                        </div>
+                                        <div class="problem-item">
+                                            <span class="problem-icon">🔒</span>
+                                            <div>
+                                                <strong>Écosystèmes fermés et abonnements obligatoires</strong>
+                                                <p>Manque d'autonomie et de liberté</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="solution-path">
+                                    <h3>Le Parcours NIRD</h3>
+                                    <div class="path-steps">
+                                        <div class="path-step" data-step="1">
+                                            <div class="step-number">1</div>
+                                            <div class="step-content">
+                                                <h4>Sensibilisation</h4>
+                                                <p>Comprendre la sobriété numérique et ses enjeux</p>
+                                            </div>
+                                        </div>
+                                        <div class="path-step" data-step="2">
+                                            <div class="step-number">2</div>
+                                            <div class="step-content">
+                                                <h4>Réemploi</h4>
+                                                <p>Réutiliser et reconditionner les équipements existants</p>
+                                            </div>
+                                        </div>
+                                        <div class="path-step" data-step="3">
+                                            <div class="step-number">3</div>
+                                            <div class="step-content">
+                                                <h4>Linux</h4>
+                                                <p>Adopter Linux pour lutter contre l'obsolescence programmée</p>
+                                            </div>
+                                        </div>
+                                        <div class="path-step" data-step="4">
+                                            <div class="step-number">4</div>
+                                            <div class="step-content">
+                                                <h4>Ressources Libres</h4>
+                                                <p>Utiliser les outils et ressources de La Forge</p>
+                                            </div>
+                                        </div>
+                                        <div class="path-step" data-step="5">
+                                            <div class="step-number">5</div>
+                                            <div class="step-content">
+                                                <h4>Transition</h4>
+                                                <p>Accompagner l'établissement vers l'autonomie numérique</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-panel" id="pillars">
+                                <h2>Les Trois Piliers de NIRD</h2>
+                                <div class="pillars-container">
+                                    <div class="pillar-card" data-pillar="inclusion">
+                                        <div class="pillar-header">
+                                            <span class="pillar-icon">🤝</span>
+                                            <h3>Inclusion</h3>
+                                        </div>
+                                        <div class="pillar-content">
+                                            <p>Rendre la technologie accessible à tous, sans discrimination. L'inclusion numérique garantit que chaque élève, enseignant et membre de la communauté éducative peut bénéficier des outils numériques.</p>
+                                            <ul>
+                                                <li>Accès équitable aux ressources</li>
+                                                <li>Formation pour tous les niveaux</li>
+                                                <li>Outils adaptés aux besoins spécifiques</li>
+                                                <li>Communauté ouverte et bienveillante</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pillar-card" data-pillar="responsibility">
+                                        <div class="pillar-header">
+                                            <span class="pillar-icon">⚖️</span>
+                                            <h3>Responsabilité</h3>
+                                        </div>
+                                        <div class="pillar-content">
+                                            <p>Utilisation éthique et consciente de la technologie. La responsabilité numérique implique de comprendre l'impact de nos choix technologiques sur la société et l'environnement.</p>
+                                            <ul>
+                                                <li>Respect de la vie privée et des données</li>
+                                                <li>Choix éthiques des outils</li>
+                                                <li>Transparence et traçabilité</li>
+                                                <li>Éducation à la citoyenneté numérique</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pillar-card" data-pillar="durability">
+                                        <div class="pillar-header">
+                                            <span class="pillar-icon">🌱</span>
+                                            <h3>Durabilité</h3>
+                                        </div>
+                                        <div class="pillar-content">
+                                            <p>Solutions numériques durables et à long terme. La durabilité numérique combine sobriété énergétique, réemploi des équipements et pérennité des solutions.</p>
+                                            <ul>
+                                                <li>Réemploi et reconditionnement</li>
+                                                <li>Sobriété numérique</li>
+                                                <li>Lutte contre l'obsolescence programmée</li>
+                                                <li>Solutions pérennes et maintenables</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-panel" id="comparison">
+                                <h2>Windows vs Approche NIRD</h2>
+                                <div class="comparison-container">
+                                    <div class="comparison-table">
+                                        <div class="comparison-header">
+                                            <div class="comparison-col">Critère</div>
+                                            <div class="comparison-col windows-col">Windows</div>
+                                            <div class="comparison-col nird-col">Approche NIRD</div>
+                                        </div>
+                                        <div class="comparison-row">
+                                            <div class="comparison-col">Coût des licences</div>
+                                            <div class="comparison-col windows-col">💰 Coûteux</div>
+                                            <div class="comparison-col nird-col">✅ Gratuit (libre)</div>
+                                        </div>
+                                        <div class="comparison-row">
+                                            <div class="comparison-col">Stockage des données</div>
+                                            <div class="comparison-col windows-col">🌍 Hors UE</div>
+                                            <div class="comparison-col nird-col">🇫🇷 Souveraineté</div>
+                                        </div>
+                                        <div class="comparison-row">
+                                            <div class="comparison-col">Obsolescence</div>
+                                            <div class="comparison-col windows-col">⏰ Programmé</div>
+                                            <div class="comparison-col nird-col">♻️ Réutilisable</div>
+                                        </div>
+                                        <div class="comparison-row">
+                                            <div class="comparison-col">Écosystème</div>
+                                            <div class="comparison-col windows-col">🔒 Fermé</div>
+                                            <div class="comparison-col nird-col">🔓 Ouvert</div>
+                                        </div>
+                                        <div class="comparison-row">
+                                            <div class="comparison-col">Autonomie</div>
+                                            <div class="comparison-col windows-col">❌ Dépendance</div>
+                                            <div class="comparison-col nird-col">✅ Autonomie</div>
+                                        </div>
+                                        <div class="comparison-row">
+                                            <div class="comparison-col">Impact environnemental</div>
+                                            <div class="comparison-col windows-col">🌍 Élevé</div>
+                                            <div class="comparison-col nird-col">🌱 Réduit</div>
+                                        </div>
+                                    </div>
+                                    <div class="comparison-summary">
+                                        <h3>💡 Pourquoi choisir NIRD ?</h3>
+                                        <p>L'approche NIRD permet aux établissements de retrouver leur <strong>autonomie numérique</strong> tout en réduisant les coûts, en respectant la souveraineté des données et en contribuant à un numérique plus durable.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-panel" id="resources">
+                                <h2>Ressources</h2>
+                                <div class="resources-grid">
+                                    <a href="https://nird.forge.apps.education.fr/" target="_blank" class="resource-card">
+                                        <span class="resource-icon">📖</span>
+                                        <strong>Site Officiel NIRD</strong>
+                                        <p>nird.forge.apps.education.fr</p>
+                                    </a>
+                                    <a href="https://video.echirolles.fr/w/hVykGUtRZqRen6eiutqRvQ" target="_blank" class="resource-card">
+                                        <span class="resource-icon">🎥</span>
+                                        <strong>Windows 11 : l'alternative des logiciels libres</strong>
+                                        <p>Reportage France 3 Alpes (2 min)</p>
+                                    </a>
+                                    <a href="https://forge.apps.education.fr/" target="_blank" class="resource-card">
+                                        <span class="resource-icon">🔨</span>
+                                        <strong>La Forge des Communs</strong>
+                                        <p>Ressources numériques éducatifs libres</p>
+                                    </a>
+                                    <a href="#" class="resource-card" id="open-docs">
+                                        <span class="resource-icon">📝</span>
+                                        <strong>Documentation</strong>
+                                        <p>Guides et tutoriels</p>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="tab-panel" id="about">
+                                <h2>À propos de NIRD</h2>
+                                <div class="about-content">
+                                    <p><strong>NIRD (Numérique Inclusif, Responsable et Durable)</strong> est une initiative portée par La Forge des Communs Numériques Éducatifs, un projet soutenu par la Direction du Numérique pour l'Éducation.</p>
+                                    <p>C'est une démarche <strong>ascendante</strong> qui met en lumière l'urgence d'agir et de changer la situation face à la dépendance aux GAFAM.</p>
+                                    
+                                    <h3>Les Acteurs du Projet</h3>
+                                    <div class="actors-list">
+                                        <div class="actor-item">👨‍🎓 Élèves et éco-délégués</div>
+                                        <div class="actor-item">👩‍🏫 Enseignants</div>
+                                        <div class="actor-item">🏫 Administrations scolaires</div>
+                                        <div class="actor-item">🔧 Techniciens et administrateurs réseau</div>
+                                        <div class="actor-item">🤝 Associations partenaires et clubs informatiques</div>
+                                        <div class="actor-item">🏛️ Collectivités territoriales</div>
+                                        <div class="actor-item">📚 Services académiques et ministère</div>
+                                    </div>
+                                    
+                                    <p class="mission-statement">Ensemble, ces acteurs <strong>expérimentent, partagent et transforment</strong> les pratiques pour construire un numérique éducatif plus autonome, plus durable, plus éthique.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="window-content">
-                    <div class="tabs">
-                        <button class="tab active" data-tab="overview">Overview</button>
-                        <button class="tab" data-tab="activities">Activities</button>
-                        <button class="tab" data-tab="resources">Resources</button>
-                    </div>
 
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="overview">
-                            <h2>Welcome to NIRD</h2>
-                            <p>Explore inclusive, responsible, and sustainable digital practices.</p>
-                            <button class="btn btn-primary">Start Learning</button>
+                <!-- Quiz Window -->
+                <div class="window" id="quiz-window" style="display: none;">
+                    <div class="window-header">
+                        <div class="window-title">Quiz NIRD - Testez vos connaissances</div>
+                        <div class="window-controls">
+                            <button class="window-btn minimize" title="Réduire">_</button>
+                            <button class="window-btn maximize" title="Agrandir">□</button>
+                            <button class="window-btn close" title="Fermer">✕</button>
                         </div>
-                        
-                        <div class="tab-pane" id="activities">
-                            <h2>Activities</h2>
-                            <ul>
-                                <li>📚 Digital Literacy Quiz</li>
-                                <li>🎮 Interactive Game</li>
-                                <li>🔧 Linux Exploration</li>
-                                <li>♻️ Sustainability Challenge</li>
-                            </ul>
+                    </div>
+                    <div class="window-content">
+                        <div class="quiz-container" id="quiz-container">
+                            <div class="quiz-header">
+                                <div class="quiz-progress">
+                                    <span>Question <span id="current-question">1</span> / <span id="total-questions">5</span></span>
+                                    <div class="quiz-progress-bar">
+                                        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="quiz-score">Score: <span id="quiz-score">0</span> points</div>
+                            </div>
+                            <div class="quiz-question" id="quiz-question"></div>
+                            <div class="quiz-answers" id="quiz-answers"></div>
+                            <div class="quiz-feedback" id="quiz-feedback"></div>
+                            <div class="bigtech-hit" id="bigtech-hit">
+                                <div class="chase-container">
+                                    <div class="bigtech-logo" id="bigtech-logo">
+                                        <div class="bigtech-name" id="bigtech-name"></div>
+                                    </div>
+                                    <div class="numbat-chaser" id="numbat-chaser">
+                                        <img src="/public/noble-numbat.png" alt="Noble Numbat" class="numbat-image" id="numbat-image" onerror="this.style.display='none'; this.parentElement.innerHTML+='<div style=\'font-size: 4rem;\'>🦫</div>';">
+                                    </div>
+                                    <div class="catch-effect" id="catch-effect">💥</div>
+                                </div>
+                            </div>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary" id="next-question" style="display: none;">Question suivante</button>
+                                <button class="btn btn-primary" id="restart-quiz" style="display: none;">Recommencer</button>
+                            </div>
                         </div>
-                        
-                        <div class="tab-pane" id="resources">
-                            <h2>Resources</h2>
-                            <ul>
-                                <li>📖 Official NIRD Site</li>
-                                <li>🎥 Video Tutorials</li>
-                                <li>📝 Documentation</li>
-                                <li>🔗 Links & References</li>
-                            </ul>
+                    </div>
+                </div>
+
+                <!-- Scenario Window -->
+                <div class="window" id="scenario-window" style="display: none;">
+                    <div class="window-header">
+                        <div class="window-title">Scénarios - Transition NIRD</div>
+                        <div class="window-controls">
+                            <button class="window-btn minimize" title="Réduire">_</button>
+                            <button class="window-btn maximize" title="Agrandir">□</button>
+                            <button class="window-btn close" title="Fermer">✕</button>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div class="scenario-container" id="scenario-container">
+                            <div class="scenario-intro">
+                                <h3>Choisissez un scénario</h3>
+                                <p>Explorez comment un établissement peut réduire ses dépendances numériques</p>
+                            </div>
+                            <div class="scenario-list">
+                                <div class="scenario-card" data-scenario="1">
+                                    <h4>🏫 Scénario 1 : Un collège face à Windows 10</h4>
+                                    <p>Un collège doit renouveler ses licences Windows. Découvrez comment l'approche NIRD peut aider.</p>
+                                    <button class="btn btn-secondary">Commencer</button>
+                                </div>
+                                <div class="scenario-card" data-scenario="2">
+                                    <h4>💻 Scénario 2 : Réemploi d'équipements</h4>
+                                    <p>Des ordinateurs "obsolètes" peuvent-ils être réutilisés ? Explorez les solutions.</p>
+                                    <button class="btn btn-secondary">Commencer</button>
+                                </div>
+                                <div class="scenario-card" data-scenario="3">
+                                    <h4>🌱 Scénario 3 : Sobriété numérique</h4>
+                                    <p>Comment réduire l'impact environnemental du numérique dans un établissement ?</p>
+                                    <button class="btn btn-secondary">Commencer</button>
+                                </div>
+                            </div>
+                            <div class="scenario-content" id="scenario-content" style="display: none;">
+                                <div class="scenario-step" id="scenario-step"></div>
+                                <div class="scenario-choices" id="scenario-choices"></div>
+                                <div class="scenario-result" id="scenario-result"></div>
+                                <button class="btn btn-primary" id="scenario-back">Retour</button>
+                            </div>
                         </div>
                     </div>
                 </div>
