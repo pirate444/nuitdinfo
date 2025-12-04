@@ -1,0 +1,295 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Ubuntu', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #333;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Taskbar */
+.taskbar {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.taskbar-left {
+    display: flex;
+    gap: 1rem;
+}
+
+.taskbar-btn {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+
+.taskbar-btn:hover,
+.taskbar-btn.active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.taskbar-center {
+    flex: 1;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.taskbar-right {
+    display: flex;
+    gap: 1rem;
+}
+
+.system-icons {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 1.1rem;
+}
+
+/* Desktop */
+.desktop {
+    display: flex;
+    height: calc(100vh - 50px);
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
+/* Dock (Left Sidebar) */
+.dock {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    gap: 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dock-item {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.dock-item:hover {
+    background-color: rgba(255, 102, 0, 0.3);
+    border-color: #ff6600;
+    transform: scale(1.1);
+}
+
+/* Desktop Content */
+.desktop-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.desktop-title {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+/* Window */
+.window {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    max-width: 800px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.window-header {
+    background: linear-gradient(90deg, #f5f5f5, #e8e8e8);
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.window-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.window-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.window-btn {
+    width: 32px;
+    height: 26px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.window-btn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.window-btn.close:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* Window Content */
+.window-content {
+    padding: 1.5rem;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid #ecf0f1;
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: #2c3e50;
+}
+
+.tab.active {
+    color: #ff6600;
+    border-bottom-color: #ff6600;
+}
+
+/* Tab Content */
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.tab-pane h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.tab-pane p {
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.tab-pane ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tab-pane li {
+    padding: 0.75rem 0;
+    color: #555;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.tab-pane li:last-child {
+    border-bottom: none;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: #ff6600;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #e55a00;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.3);
+}
+
+/* Scrollbar */
+.desktop-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.desktop-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.desktop-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 102, 0, 0.5);
+    border-radius: 4px;
+}
+
+.desktop-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 102, 0, 0.7);
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIRD - Ubuntu Desktop Simulation</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="taskbar-left">
+            <button class="taskbar-btn active" id="btn-activities">Activities</button>
+        </div>
+        <div class="taskbar-center">
+            <span class="time" id="time"></span>
+        </div>
+        <div class="taskbar-right">
+            <div class="system-icons">
+                <span class="icon">🔊</span>
+                <span class="icon">🔋</span>
+                <span class="icon">📡</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="desktop">
+        <!-- Left Sidebar (Dock) -->
+        <div class="dock">
+            <div class="dock-item" title="Files">
+                <span>📁</span>
+            </div>
+            <div class="dock-item" title="Terminal">
+                <span>⌨️</span>
+            </div>
+            <div class="dock-item" title="Browser">
+                <span>🌐</span>
+            </div>
+            <div class="dock-item" title="NIRD App">
+                <span>🎨</span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="desktop-content">
+            <h1 class="desktop-title">NIRD - Numérique Inclusif, Responsable et Durable</h1>
+            
+            <!-- Window Container -->
+            <div class="window" id="main-window">
+                <div class="window-header">
+                    <div class="window-title">NIRD Project</div>
+                    <div class="window-controls">
+                        <button class="window-btn minimize">−</button>
+                        <button class="window-btn maximize">☐</button>
+                        <button class="window-btn close">✕</button>
+                    </div>
+                </div>
+                
+                <div class="window-content">
+                    <div class="tabs">
+                        <button class="tab active" data-tab="overview">Overview</button>
+                        <button class="tab" data-tab="activities">Activities</button>
+                        <button class="tab" data-tab="resources">Resources</button>
+                    </div>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="overview">
+                            <h2>Welcome to NIRD</h2>
+                            <p>Explore inclusive, responsible, and sustainable digital practices.</p>
+                            <button class="btn btn-primary">Start Learning</button>
+                        </div>
+                        
+                        <div class="tab-pane" id="activities">
+                            <h2>Activities</h2>
+                            <ul>
+                                <li>📚 Digital Literacy Quiz</li>
+                                <li>🎮 Interactive Game</li>
+                                <li>🔧 Linux Exploration</li>
+                                <li>♻️ Sustainability Challenge</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-pane" id="resources">
+                            <h2>Resources</h2>
+                            <ul>
+                                <li>📖 Official NIRD Site</li>
+                                <li>🎥 Video Tutorials</li>
+                                <li>📝 Documentation</li>
+                                <li>🔗 Links & References</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/main.js"></script>
+</body>
+</html>
