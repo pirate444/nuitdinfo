@@ -197,40 +197,73 @@ nirdWindow.addEventListener('mousedown', () => {
 });
 
 // Dock item click handler
+// ... existing code ...
+
+// Dock items - open windows
 document.querySelectorAll('.dock-item').forEach(item => {
     item.addEventListener('click', () => {
+        const app = item.getAttribute('data-app');
+        openWindow(app);
+        
         document.querySelectorAll('.dock-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
-        
-        const app = item.getAttribute('data-app');
-        openApp(app);
     });
 });
 
-// Double-click desktop icon to open
-document.querySelectorAll('.desktop-icon').forEach(icon => {
-    icon.addEventListener('dblclick', () => {
-        const app = icon.getAttribute('data-open');
-        if (app) openApp(app);
+// Activity cards - open windows
+document.querySelectorAll('.activity-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const app = card.getAttribute('data-app');
+        openWindow(app);
+        activitiesOverview.classList.remove('active');
     });
 });
 
-// Open app function
-function openApp(app) {
-    if (app === 'nird') {
-        nirdWindow.style.display = 'flex';
-        bringWindowToFront(nirdWindow);
-    } else if (app === 'quiz') {
-        const quizWindow = document.getElementById('quiz-window');
-        quizWindow.style.display = 'flex';
-        bringWindowToFront(quizWindow);
-        initQuiz();
-    } else if (app === 'scenario') {
-        const scenarioWindow = document.getElementById('scenario-window');
-        scenarioWindow.style.display = 'flex';
-        bringWindowToFront(scenarioWindow);
+// Open window function
+function openWindow(app) {
+    const windowMap = {
+        'nird': 'nird-window',
+        'quiz': 'quiz-window',
+        'scenario': 'scenario-window',
+        'adblocker': 'adblocker-window'
+    };
+
+    const windowId = windowMap[app];
+    if (windowId) {
+        const windowElement = document.getElementById(windowId);
+        if (windowElement) {
+            windowElement.style.display = 'flex';
+            bringWindowToFront(windowElement);
+            
+            // Load AdBlocker content if it's the adblocker window
+            if (app === 'adblocker') {
+                loadAdBlockerContent();
+            }
+        }
     }
 }
+
+// Load AdBlocker popup from external directory
+function loadAdBlockerContent() {
+    const iframe = document.getElementById('adblocker-iframe');
+    const placeholder = document.getElementById('adblocker-placeholder');
+    
+    // Use relative path based on current directory structure
+    const popupPath = '../../../Nettoyez-le-web-comme-VOUS-l-entendez/popup.html';
+    
+    iframe.src = popupPath;
+    
+    iframe.onload = function() {
+        placeholder.style.display = 'none';
+        iframe.style.display = 'block';
+    };
+    
+    iframe.onerror = function() {
+        placeholder.innerHTML = '<p>❌ Impossible de charger le contenu AdBlocker. Vérifiez le chemin du fichier.</p>';
+    };
+}
+
+// ... rest of existing code ...
 
 // Progress Tracking System
 let userProgress = {
@@ -707,5 +740,8 @@ function setupWindowControls(windowId) {
 
 setupWindowControls('quiz-window');
 setupWindowControls('scenario-window');
+setupWindowControls('adblocker-window');
+setupWindowDragging(document.getElementById('adblocker-window'));
+
 
 console.log('NIRD Ubuntu Noble Numbat Desktop - Ready! 🚀');

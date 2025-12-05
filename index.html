@@ -5,9 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NIRD - Ubuntu Noble Numbat Desktop</title>
     <link rel="stylesheet" href="styles/style.css">
+    <style>
+        /* Specific styles for the Desktop Snake integration */
+        #snake-bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind icons */
+            pointer-events: none; /* Let clicks pass through to icons */
+        }
+        
+        #desktop-score-widget {
+            display: none; /* Hidden until game starts */
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 0;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-family: Ubuntu, sans-serif;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Ensure icons stay above the game */
+        .desktop-icons {
+            position: relative;
+            z-index: 1; 
+        }
+    </style>
 </head>
 <body>
-    <!-- Top Panel -->
     <div class="top-panel">
         <div class="panel-left">
             <button class="activities-btn" id="btn-activities">
@@ -25,7 +57,6 @@
         </div>
     </div>
 
-    <!-- Activities Overview -->
     <div class="activities-overview" id="activities-overview">
         <input type="text" class="activities-search" placeholder="Rechercher une application..." id="activities-search">
         <div class="activities-grid" id="activities-grid">
@@ -64,15 +95,14 @@
         </div>
     </div>
 
-    <!-- Desktop -->
     <div class="desktop">
-        <!-- Sidebar Dock -->
+        
         <div class="sidebar-dock">
             <button class="dock-item active" title="Files" data-app="files">
                 <span>📁</span>
             </button>
-            <button class="dock-item" title="Terminal" data-app="terminal">
-                <span>⌨️</span>
+            <button class="dock-item" title="add blocker" data-app="AddBlocker">
+                <span><img src="/home/chouayeb/Desktop/nuitdinfo/Nettoyez-le-web-comme-VOUS-l-entendez/icons/icon.png"></img></span>
             </button>
             <button class="dock-item" title="Firefox" data-app="browser">
                 <span>🌐</span>
@@ -80,7 +110,7 @@
             <button class="dock-item" title="NIRD" data-app="nird">
                 <span>🎨</span>
             </button>
-            <button class="dock-item" title="Quiz NIRD" data-app="quiz">
+            <button class="dock-item" title="Quiz " data-app="quiz">
                 <span>🧩</span>
             </button>
             <button class="dock-item" title="Scénarios" data-app="scenario">
@@ -92,9 +122,14 @@
             </button>
         </div>
 
-        <!-- Main Desktop Content -->
-        <div class="desktop-main">
-            <!-- Desktop Icons -->
+        <div class="desktop-main" id="desktop-main-area" style="position: relative;">
+            
+            <canvas id="snake-bg-canvas"></canvas>
+            
+            <div id="desktop-score-widget">
+                🐍 Score: <span id="desktop-score-val">0</span>
+            </div>
+
             <div class="desktop-icons">
                 <div class="desktop-icon" draggable="true" data-open="readme">
                     <div class="icon-image">📄</div>
@@ -108,11 +143,13 @@
                     <div class="icon-image">🧩</div>
                     <div class="icon-label">Quiz NIRD</div>
                 </div>
+                <div class="desktop-icon" draggable="true">
+                    <div class="icon-image">🐍</div>
+                    <div class="icon-label">Press Arrow Key</div>
+                </div>
             </div>
 
-            <!-- Windows Container -->
             <div class="windows-container">
-                <!-- Main NIRD Window -->
                 <div class="window active" id="nird-window">
                     <div class="window-header">
                         <div class="window-title">Projet NIRD</div>
@@ -377,8 +414,6 @@
                     </div>
                 </div>
 
-                <!-- Quiz Window -->
-                <!-- Quiz Window -->
 <div class="window" id="quiz-window" style="display: none;">
     <div class="window-header">
         <div class="window-title">Quiz NIRD - Testez vos connaissances</div>
@@ -428,59 +463,193 @@
 
     </div>
 </div>
-                <!-- Scenario Window -->
-<div class="window" id="scenario-window" style="display:none;">
-    <div class="window-header">
-        <div class="window-title">Scénarios - Transition NIRD</div>
-        <div class="window-controls">
-            <button class="window-btn minimize">_</button>
-            <button class="window-btn maximize">□</button>
-            <button class="window-btn close">✕</button>
-        </div>
-    </div>
 
-    <div class="window-content">
+                <div class="window" id="scenario-window" style="display:none;">
+                    <div class="window-header">
+                        <div class="window-title">Scénarios - Transition NIRD</div>
+                        <div class="window-controls">
+                            <button class="window-btn minimize">_</button>
+                            <button class="window-btn maximize">□</button>
+                            <button class="window-btn close">✕</button>
+                        </div>
+                    </div>
 
-        <!-- MAIN LIST -->
-        <div class="scenario-list">
-            <div class="scenario-card" data-scenario="1">
-                <div class="scenario-card-icon">🏫</div>
-                <h3>Scénario 1 : Windows 10</h3>
-                <p>Renouvellement des licences Windows et alternatives.</p>
-                <button>Commencer</button>
-            </div>
+                    <div class="window-content">
+                        <div class="scenario-list">
+                            <div class="scenario-card" data-scenario="1">
+                                <div class="scenario-card-icon">🏫</div>
+                                <h3>Scénario 1 : Windows 10</h3>
+                                <p>Renouvellement des licences Windows et alternatives.</p>
+                                <button>Commencer</button>
+                            </div>
 
-            <div class="scenario-card" data-scenario="2">
-                <div class="scenario-card-icon">💻</div>
-                <h3>Scénario 2 : Réemploi</h3>
-                <p>Réutiliser les anciens postes avec Linux.</p>
-                <button>Commencer</button>
-            </div>
+                            <div class="scenario-card" data-scenario="2">
+                                <div class="scenario-card-icon">💻</div>
+                                <h3>Scénario 2 : Réemploi</h3>
+                                <p>Réutiliser les anciens postes avec Linux.</p>
+                                <button>Commencer</button>
+                            </div>
 
-            <div class="scenario-card" data-scenario="3">
-                <div class="scenario-card-icon">🌱</div>
-                <h3>Scénario 3 : Sobriété</h3>
-                <p>Réduire l'impact environnemental.</p>
-                <button>Commencer</button>
-            </div>
-        </div>
+                            <div class="scenario-card" data-scenario="3">
+                                <div class="scenario-card-icon">🌱</div>
+                                <h3>Scénario 3 : Sobriété</h3>
+                                <p>Réduire l'impact environnemental.</p>
+                                <button>Commencer</button>
+                            </div>
+                        </div>
 
-        <!-- SCENARIO EXECUTION -->
-        <div id="scenario-content" style="display:none;">
-            <div id="scenario-step"></div>
-            <div id="scenario-choices"></div>
-            <div id="scenario-result"></div>
+                        <div id="scenario-content" style="display:none;">
+                            <div id="scenario-step"></div>
+                            <div id="scenario-choices"></div>
+                            <div id="scenario-result"></div>
 
-            <button id="scenario-back">Retour</button>
-        </div>
+                            <button id="scenario-back">Retour</button>
+                        </div>
+                    </div>
+                </div>
 
-    </div>
-</div>
+                <div class="window" style="display:none;">
+                    <a href="/home/chouayeb/Desktop/nuitdinfo/Nettoyez-le-web-comme-VOUS-l-entendez/popup.html">link text</a>
+                </div>
+            </div> </div> </div> <script src="scripts/main.js"></script>
 
-            </div>
-        </div>
-    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        const container = document.getElementById('desktop-main-area');
+        const canvas = document.getElementById('snake-bg-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreWidget = document.getElementById('desktop-score-widget');
+        const scoreVal = document.getElementById('desktop-score-val');
 
-    <script src="scripts/main.js"></script>
+        // Game Variables
+        let gameRunning = false;
+        let score = 0;
+        let gridSize = 30; // Bigger squares for desktop visibility
+        let tileCountX = 0;
+        let tileCountY = 0;
+        
+        let playerX = 10;
+        let playerY = 10;
+        let velocityX = 0;
+        let velocityY = 0;
+        
+        let trail = [];
+        let tailLength = 5;
+        
+        let appleX = 15;
+        let appleY = 15;
+
+        // Resize Canvas to fill the desktop-main area
+        function resizeGame() {
+            if(container && canvas) {
+                canvas.width = container.offsetWidth;
+                canvas.height = container.offsetHeight;
+                tileCountX = Math.floor(canvas.width / gridSize);
+                tileCountY = Math.floor(canvas.height / gridSize);
+            }
+        }
+        
+        // Initial resize
+        resizeGame();
+        window.addEventListener('resize', resizeGame);
+
+        // Keyboard Input
+        document.addEventListener('keydown', (evt) => {
+            // Check for Arrow Keys
+            if([37, 38, 39, 40].includes(evt.keyCode)) {
+                
+                // Start game if not running
+                if (!gameRunning) {
+                    gameRunning = true;
+                    scoreWidget.style.display = 'block'; // Show score
+                    gameLoop(); // Start loop
+                }
+                
+                // Prevent scrolling
+                evt.preventDefault();
+
+                // Direction Logic
+                switch(evt.keyCode) {
+                    case 37: // Left
+                        if(velocityX !== 1) { velocityX = -1; velocityY = 0; }
+                        break;
+                    case 38: // Up
+                        if(velocityY !== 1) { velocityX = 0; velocityY = -1; }
+                        break;
+                    case 39: // Right
+                        if(velocityX !== -1) { velocityX = 1; velocityY = 0; }
+                        break;
+                    case 40: // Down
+                        if(velocityY !== -1) { velocityX = 0; velocityY = 1; }
+                        break;
+                }
+            }
+        });
+
+        function gameLoop() {
+            if(!gameRunning) return;
+
+            // Move Player
+            playerX += velocityX;
+            playerY += velocityY;
+
+            // Wall Collision (Wrap around)
+            if(playerX < 0) playerX = tileCountX - 1;
+            if(playerX >= tileCountX) playerX = 0;
+            if(playerY < 0) playerY = tileCountY - 1;
+            if(playerY >= tileCountY) playerY = 0;
+
+            // Clear Canvas (Transparent)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Snake
+            // Head is Ubuntu Orange, Body slightly darker
+            for(let i = 0; i < trail.length; i++) {
+                ctx.fillStyle = (i === trail.length - 1) ? "#E95420" : "#C74215"; 
+                ctx.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2);
+
+                // Self Hit Check
+                if(trail[i].x === playerX && trail[i].y === playerY) {
+                    // Reset Game
+                    tailLength = 5;
+                    score = 0;
+                    scoreVal.innerText = score;
+                    // Optional: Flash screen red or reset silently
+                }
+            }
+
+            // Manage Trail
+            trail.push({x: playerX, y: playerY});
+            while(trail.length > tailLength) {
+                trail.shift();
+            }
+
+            // Draw Apple (White or Green to contrast with wallpaper)
+            ctx.fillStyle = "#772953"; // Ubuntu Aubergine
+            ctx.beginPath();
+            ctx.arc(
+                (appleX * gridSize) + (gridSize/2), 
+                (appleY * gridSize) + (gridSize/2), 
+                gridSize/3, 0, Math.PI * 2
+            );
+            ctx.fill();
+
+            // Check Apple Collision
+            if(Math.floor(playerX) === Math.floor(appleX) && Math.floor(playerY) === Math.floor(appleY)) {
+                tailLength++;
+                score += 10;
+                scoreVal.innerText = score;
+                
+                // Randomize new apple position within desktop bounds
+                appleX = Math.floor(Math.random() * tileCountX);
+                appleY = Math.floor(Math.random() * tileCountY);
+            }
+
+            // Loop speed (15 FPS)
+            setTimeout(gameLoop, 1000/15);
+        }
+    });
+    </script>
 </body>
 </html>
