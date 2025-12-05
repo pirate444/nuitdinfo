@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinguin Snake</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            border: 4px solid #ecf0f1;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            background-color: #000;
+        }
+
+        canvas {
+            display: block;
+            background-color: #1a1a1a;
+            image-rendering: pixelated;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #score-board {
+            text-align: left;
+            font-size: 14px;
+            text-shadow: 2px 2px #000;
+            line-height: 1.8;
+        }
+
+        .stat-line {
+            margin: 5px 0;
+        }
+
+        .good-count {
+            color: #2ecc71;
+        }
+
+        .bad-count {
+            color: #e74c3c;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border: 4px solid #e74c3c;
+            display: none;
+            pointer-events: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #c0392b;
+        }
+
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.2) 50%,
+                    rgba(0, 0, 0, 0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .popup {
+            position: absolute;
+            font-size: 20px;
+            font-weight: bold;
+            pointer-events: none;
+            animation: popup 1s ease-out forwards;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        @keyframes popup {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+
+        .flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .flash.good {
+            background: rgba(46, 204, 113, 0.3);
+            animation: flash 0.3s ease-out;
+        }
+
+        .flash.bad {
+            background: rgba(231, 76, 60, 0.5);
+            animation: flash 0.3s ease-out;
+        }
+
+        @keyframes flash {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="1900" height="600"></canvas>
+        <div class="scanlines"></div>
+        <div id="ui-layer">
+            <div id="score-board">
+                <div class="stat-line">SCORE: <span id="score">0</span></div>
+                <div class="stat-line good-count">🟢 GOOD: <span id="good-count">0</span></div>
+                <div class="stat-line bad-count">🔴 BAD: <span id="bad-count">0</span></div>
+                <div class="stat-line">LENGTH: <span id="length">1</span></div>
+            </div>
+        </div>
+        <div id="game-over">
+            <h1>GAME OVER</h1>
+            <p id="game-over-reason"></p>
+            <p>SCORE: <span id="final-score">0</span></p>
+            <button onclick="resetGame()">RESTART</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const goodCountEl = document.getElementById('good-count');
+        const badCountEl = document.getElementById('bad-count');
+        const lengthEl = document.getElementById('length');
+        const finalScoreEl = document.getElementById('final-score');
+        const gameOverEl = document.getElementById('game-over');
+        const gameOverReasonEl = document.getElementById('game-over-reason');
+
+        // Game Config
+        const GRID_SIZE = 40;
+        const TILE_COUNT = canvas.width / GRID_SIZE;
+        const MOVE_INTERVAL = 150;
+        const MIN_SAFE_LENGTH = 1; // Head only minimum
+
+        // Assets
+        const assets = {
+            head: new Image(),
+            body: new Image(),
+            good: [],
+            bad: []
+        };
+
+        const goodIcons = [
+            'arch-removebg-preview.png',
+            'fedore-removebg-preview.png',
+            'ubuntu.jpg'
+        ];
+
+        const badIcons = [
+            'aws-removebg-preview.png',
+            'google-removebg-preview.png',
+            'microsoft-removebg-preview.png'
+        ];
+
+        // Load assets
+        const timestamp = new Date().getTime();
+        assets.head.src = 'pinguin_parts/head.png?t=' + timestamp;
+        assets.body.src = 'pinguin_parts/body.png?t=' + timestamp;
+
+        goodIcons.forEach(icon => {
+            const img = new Image();
+            img.src = `good-icons/${icon}?t=${timestamp}`;
+            assets.good.push(img);
+        });
+
+        badIcons.forEach(icon => {
+            const img = new Image();
+            img.src = `bad-icons/${icon}?t=${timestamp}`;
+            assets.bad.push(img);
+        });
+
+        // Game State Variables
+        let snake = [];
+        let direction = { x: 1, y: 0 };
+        let nextDirection = { x: 1, y: 0 };
+        let score = 0;
+        let goodCount = 0;
+        let badCount = 0;
+        let foods = [];
+        let lastMoveTime = 0;
+        let isGameOver = false;
+        const MAX_FOOD_ITEMS = 3;
+        let gameStarted = false;
+        let waitingForInput = true; // Wait for first arrow key press
+
+        function initGame() {
+            // Prevent double initialization
+            if (gameStarted && !isGameOver) return;
+            gameStarted = true;
+
+            // Start with just head
+            snake = [
+                { x: 5, y: 10, type: 'head' }
+            ];
+            direction = { x: 1, y: 0 };
+            nextDirection = { x: 1, y: 0 };
+            score = 0;
+            goodCount = 0;
+            badCount = 0;
+            foods = []; // Clear foods
+            updateUI();
+            isGameOver = false;
+            waitingForInput = true; // Wait for arrow key press
+            gameOverEl.style.display = 'none';
+
+            // Spawn initial batch of food
+            for (let i = 0; i < MAX_FOOD_ITEMS; i++) {
+                spawnFood();
+            }
+
+            lastMoveTime = 0; // Will be set on first gameLoop frame
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updateUI() {
+            scoreEl.innerText = score;
+            goodCountEl.innerText = goodCount;
+            badCountEl.innerText = badCount;
+            lengthEl.innerText = snake.length;
+        }
+
+        function spawnFood() {
+            let valid = false;
+            let newFood = { x: 0, y: 0, type: 'good', img: null };
+
+            // Try to find a valid spot
+            let attempts = 0;
+            while (!valid && attempts < 100) {
+                newFood.x = Math.floor(Math.random() * TILE_COUNT);
+                newFood.y = Math.floor(Math.random() * TILE_COUNT);
+
+                // Check collision with snake AND existing foods
+                const onSnake = snake.some(segment => segment.x === newFood.x && segment.y === newFood.y);
+                const onFood = foods.some(f => f.x === newFood.x && f.y === newFood.y);
+
+                valid = !onSnake && !onFood;
+                attempts++;
+            }
+
+            // 70% good, 30% bad
+            newFood.type = Math.random() < 0.7 ? 'good' : 'bad';
+
+            // Assign random image based on type
+            if (newFood.type === 'good') {
+                if (assets.good.length > 0) {
+                    newFood.img = assets.good[Math.floor(Math.random() * assets.good.length)];
+                } else {
+                    newFood.img = null;
+                }
+            } else {
+                if (assets.bad.length > 0) {
+                    newFood.img = assets.bad[Math.floor(Math.random() * assets.bad.length)];
+                } else {
+                    newFood.img = null;
+                }
+            }
+
+            foods.push(newFood);
+        }
+
+        function resetGame() {
+            gameStarted = false;
+            initGame();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (isGameOver) return;
+
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (waitingForInput || direction.y === 0) {
+                        nextDirection = { x: 0, y: -1 };
+                        if (waitingForInput) direction = { x: 0, y: -1 };
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (waitingForInput || direction.y === 0) {
+                        nextDirection = { x: 0, y: 1 };
+                        if (waitingForInput) direction = { x: 0, y: 1 };
+                    }
+                    break;
+                case 'ArrowLeft':
+                    if (waitingForInput || direction.x === 0) {
+                        nextDirection = { x: -1, y: 0 };
+                        if (waitingForInput) direction = { x: -1, y: 0 };
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (waitingForInput || direction.x === 0) {
+                        nextDirection = { x: 1, y: 0 };
+                        if (waitingForInput) direction = { x: 1, y: 0 };
+                    }
+                    break;
+            }
+
+            // Start moving on first arrow key press
+            if (waitingForInput) {
+                waitingForInput = false;
+                lastMoveTime = 0; // Reset timing
+            }
+        });
+
+        function growSnake() {
+            // Add segment at the tail position
+            const tail = snake[snake.length - 1];
+            snake.push({ x: tail.x, y: tail.y, type: 'body' });
+        }
+
+        function shrinkSnake() {
+            if (snake.length > MIN_SAFE_LENGTH) {
+                snake.pop();
+            } else {
+                // Game over - too short
+                gameOver('Too short! The pinguin disappeared!');
+            }
+        }
+
+        function showPopup(text, x, y, color) {
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.innerText = text;
+            popup.style.color = color;
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            document.getElementById('game-container').appendChild(popup);
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        function showFlash(type) {
+            const flash = document.createElement('div');
+            flash.className = 'flash ' + type;
+            document.getElementById('game-container').appendChild(flash);
+            setTimeout(() => flash.remove(), 300);
+        }
+
+        function update() {
+            direction = nextDirection;
+            const head = snake[0];
+            const newHead = {
+                x: head.x + direction.x,
+                y: head.y + direction.y,
+                type: 'head'
+            };
+
+            // Collision with walls
+            if (newHead.x < 0 || newHead.x >= TILE_COUNT || newHead.y < 0 || newHead.y >= TILE_COUNT) {
+                gameOver('Hit the wall!');
+                return;
+            }
+
+            // Collision with self
+            if (snake.some((seg, index) => index !== snake.length - 1 && seg.x === newHead.x && seg.y === newHead.y)) {
+                gameOver('Ate itself!');
+                return;
+            }
+
+            snake.unshift(newHead);
+
+            // All segments except head are body
+            for (let i = 1; i < snake.length; i++) {
+                snake[i].type = 'body';
+            }
+
+            // Check Food Collision
+            const eatenFoodIndex = foods.findIndex(f => f.x === newHead.x && f.y === newHead.y);
+
+            if (eatenFoodIndex !== -1) {
+                const eatenFood = foods[eatenFoodIndex];
+                const foodX = eatenFood.x * GRID_SIZE + GRID_SIZE / 2;
+                const foodY = eatenFood.y * GRID_SIZE + GRID_SIZE / 2;
+
+                if (eatenFood.type === 'good') {
+                    // Good food
+                    score += 10;
+                    goodCount++;
+                    // growSnake(); // Removed to prevent double growth
+                    showPopup('+1', foodX, foodY, '#2ecc71');
+                    showFlash('good');
+                } else {
+                    // Bad food
+                    score -= 5;
+                    badCount++;
+                    snake.pop(); // Movement pop
+                    shrinkSnake(); // Damage pop
+                    showPopup('-1', foodX, foodY, '#e74c3c');
+                    showFlash('bad');
+                }
+
+                // Remove eaten food and spawn new one
+                foods.splice(eatenFoodIndex, 1);
+                spawnFood();
+
+                updateUI();
+            } else {
+                // Remove tail if not eating
+                snake.pop();
+            }
+        }
+
+        function gameLoop(timestamp) {
+            // Initialize lastMoveTime on first frame if not set
+            if (lastMoveTime === 0) {
+                lastMoveTime = timestamp;
+            }
+
+            // Only update (move) if not waiting for input
+            if (!waitingForInput) {
+                const timeSinceLastMove = timestamp - lastMoveTime;
+
+                if (timeSinceLastMove >= MOVE_INTERVAL) {
+                    update();
+                    lastMoveTime = timestamp;
+                }
+            }
+
+            draw();
+
+            if (!isGameOver) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function gameOver(reason) {
+            isGameOver = true;
+            finalScoreEl.innerText = score;
+            gameOverReasonEl.innerText = reason || 'Game Over!';
+            gameOverEl.style.display = 'block';
+        }
+
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw All Foods
+            foods.forEach(foodItem => {
+                const fx = foodItem.x * GRID_SIZE;
+                const fy = foodItem.y * GRID_SIZE;
+
+                // Draw glow
+                const cx = fx + GRID_SIZE / 2;
+                const cy = fy + GRID_SIZE / 2;
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, GRID_SIZE / 2 + 5, 0, Math.PI * 2);
+                if (foodItem.type === 'good') {
+                    ctx.fillStyle = 'rgba(46, 204, 113, 0.3)';
+                } else {
+                    ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
+                }
+                ctx.fill();
+
+                // Draw Icon
+                if (foodItem.img && foodItem.img.complete && foodItem.img.naturalHeight !== 0) {
+                    ctx.drawImage(foodItem.img, fx, fy, GRID_SIZE, GRID_SIZE);
+                } else {
+                    // Fallback
+                    ctx.fillStyle = foodItem.type === 'good' ? '#f1c40f' : '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, GRID_SIZE / 2 - 4, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (foodItem.type === 'bad') {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = 'bold 20px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('☠', cx, cy);
+                    } else {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = 'bold 20px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('✨', cx, cy);
+                    }
+                }
+            });
+
+            // Draw Snake
+            for (let i = snake.length - 1; i >= 0; i--) {
+                const segment = snake[i];
+                let dx, dy;
+
+                if (i === 0) {
+                    // Head - use current direction
+                    dx = direction.x;
+                    dy = direction.y;
+                } else {
+                    // Body - point towards the segment in front
+                    dx = snake[i - 1].x - segment.x;
+                    dy = snake[i - 1].y - segment.y;
+                }
+
+                // Calculate rotation angle
+                let angle = Math.atan2(dy, dx);
+
+                // Get the appropriate image
+                let img = assets[segment.type];
+
+                // Draw with rotation or fallback
+                if (img && img.complete && img.naturalHeight !== 0) {
+                    drawRotatedImage(img, segment.x * GRID_SIZE, segment.y * GRID_SIZE, GRID_SIZE, GRID_SIZE, angle);
+                } else {
+                    // Fallback rendering if image missing
+                    ctx.save();
+                    ctx.translate(segment.x * GRID_SIZE + GRID_SIZE / 2, segment.y * GRID_SIZE + GRID_SIZE / 2);
+                    ctx.rotate(angle);
+                    ctx.fillStyle = segment.type === 'head' ? '#e67e22' : '#d35400'; // Orange/Brown fallback
+                    ctx.fillRect(-GRID_SIZE / 2, -GRID_SIZE / 2, GRID_SIZE, GRID_SIZE);
+                    // Draw eye to show direction
+                    if (segment.type === 'head') {
+                        ctx.fillStyle = 'white';
+                        ctx.beginPath();
+                        ctx.arc(10, -10, 5, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillStyle = 'black';
+                        ctx.beginPath();
+                        ctx.arc(12, -10, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+            }
+        }
+
+        function drawRotatedImage(image, x, y, width, height, angle) {
+            ctx.save();
+            ctx.translate(x + width / 2, y + height / 2);
+            ctx.rotate(angle);
+            ctx.drawImage(image, -width / 2, -height / 2, width, height);
+            ctx.restore();
+        }
+
+        // Start game when head image loads
+        assets.head.onload = () => {
+            initGame();
+        };
+
+        // Fallback: start game after timeout if image fails to load
+        assets.head.onerror = () => {
+            console.warn('Head image failed to load, starting with fallback graphics');
+            initGame();
+        };
+
+        // Additional fallback: start game after 2 seconds if nothing else works
+        setTimeout(() => {
+            if (!isGameOver && snake.length === 0) {
+                console.warn('Starting game via timeout fallback');
+                initGame();
+            }
+        }, 2000);
+
+    </script>
+</body>
+
+</html>
