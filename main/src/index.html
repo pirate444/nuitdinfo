@@ -378,90 +378,105 @@
                 </div>
 
                 <!-- Quiz Window -->
-                <div class="window" id="quiz-window" style="display: none;">
-                    <div class="window-header">
-                        <div class="window-title">Quiz NIRD - Testez vos connaissances</div>
-                        <div class="window-controls">
-                            <button class="window-btn minimize" title="Réduire">_</button>
-                            <button class="window-btn maximize" title="Agrandir">□</button>
-                            <button class="window-btn close" title="Fermer">✕</button>
-                        </div>
-                    </div>
-                    <div class="window-content">
-                        <div class="quiz-container" id="quiz-container">
-                            <div class="quiz-header">
-                                <div class="quiz-progress">
-                                    <span>Question <span id="current-question">1</span> / <span id="total-questions">5</span></span>
-                                    <div class="quiz-progress-bar">
-                                        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="quiz-score">Score: <span id="quiz-score">0</span> points</div>
-                            </div>
-                            <div class="quiz-question" id="quiz-question"></div>
-                            <div class="quiz-answers" id="quiz-answers"></div>
-                            <div class="quiz-feedback" id="quiz-feedback"></div>
-                            <div class="bigtech-hit" id="bigtech-hit">
-                                <div class="chase-container">
-                                    <div class="bigtech-logo" id="bigtech-logo">
-                                        <div class="bigtech-name" id="bigtech-name"></div>
-                                    </div>
-                                    <div class="numbat-chaser" id="numbat-chaser">
-                                        <img src="/public/noble-numbat.png" alt="Noble Numbat" class="numbat-image" id="numbat-image" onerror="this.style.display='none'; this.parentElement.innerHTML+='<div style=\'font-size: 4rem;\'>🦫</div>';">
-                                    </div>
-                                    <div class="catch-effect" id="catch-effect">💥</div>
-                                </div>
-                            </div>
-                            <div class="quiz-actions">
-                                <button class="btn btn-primary" id="next-question" style="display: none;">Question suivante</button>
-                                <button class="btn btn-primary" id="restart-quiz" style="display: none;">Recommencer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Quiz Window -->
+<div class="window" id="quiz-window" style="display: none;">
+    <div class="window-header">
+        <div class="window-title">Quiz NIRD - Testez vos connaissances</div>
+        <div class="window-controls">
+            <button class="window-btn minimize">_</button>
+            <button class="window-btn maximize">□</button>
+            <button class="window-btn close">✕</button>
+        </div>
+    </div>
 
-                <!-- Scenario Window -->
-                <div class="window" id="scenario-window" style="display: none;">
-                    <div class="window-header">
-                        <div class="window-title">Scénarios - Transition NIRD</div>
-                        <div class="window-controls">
-                            <button class="window-btn minimize" title="Réduire">_</button>
-                            <button class="window-btn maximize" title="Agrandir">□</button>
-                            <button class="window-btn close" title="Fermer">✕</button>
-                        </div>
-                    </div>
-                    <div class="window-content">
-                        <div class="scenario-container" id="scenario-container">
-                            <div class="scenario-intro">
-                                <h3>Choisissez un scénario</h3>
-                                <p>Explorez comment un établissement peut réduire ses dépendances numériques</p>
-                            </div>
-                            <div class="scenario-list">
-                                <div class="scenario-card" data-scenario="1">
-                                    <h4>🏫 Scénario 1 : Un collège face à Windows 10</h4>
-                                    <p>Un collège doit renouveler ses licences Windows. Découvrez comment l'approche NIRD peut aider.</p>
-                                    <button class="btn btn-secondary">Commencer</button>
-                                </div>
-                                <div class="scenario-card" data-scenario="2">
-                                    <h4>💻 Scénario 2 : Réemploi d'équipements</h4>
-                                    <p>Des ordinateurs "obsolètes" peuvent-ils être réutilisés ? Explorez les solutions.</p>
-                                    <button class="btn btn-secondary">Commencer</button>
-                                </div>
-                                <div class="scenario-card" data-scenario="3">
-                                    <h4>🌱 Scénario 3 : Sobriété numérique</h4>
-                                    <p>Comment réduire l'impact environnemental du numérique dans un établissement ?</p>
-                                    <button class="btn btn-secondary">Commencer</button>
-                                </div>
-                            </div>
-                            <div class="scenario-content" id="scenario-content" style="display: none;">
-                                <div class="scenario-step" id="scenario-step"></div>
-                                <div class="scenario-choices" id="scenario-choices"></div>
-                                <div class="scenario-result" id="scenario-result"></div>
-                                <button class="btn btn-primary" id="scenario-back">Retour</button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="window-content">
+
+        <!-- TOP INFO BAR -->
+        <div class="quiz-info">
+            <div class="quiz-info-item">
+                <div class="quiz-info-label">Question</div>
+                <div class="quiz-info-value">
+                    <span id="current-question">1</span> /
+                    <span id="total-questions">5</span>
                 </div>
+            </div>
+            <div class="quiz-info-item">
+                <div class="quiz-info-label">Score</div>
+                <div class="quiz-info-value" id="quiz-score">0</div>
+            </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div class="quiz-progress">
+            <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+        </div>
+
+        <!-- QUESTION -->
+        <h3 id="quiz-question"></h3>
+
+        <!-- ANSWERS -->
+        <div id="quiz-answers"></div>
+
+        <!-- FEEDBACK -->
+        <div id="quiz-feedback"></div>
+
+        <!-- BIG TECH ANIMATION -->
+
+        <!-- BUTTONS -->
+        <button id="next-question">Question suivante</button>
+        <button id="restart-quiz">Recommencer</button>
+
+    </div>
+</div>
+                <!-- Scenario Window -->
+<div class="window" id="scenario-window" style="display:none;">
+    <div class="window-header">
+        <div class="window-title">Scénarios - Transition NIRD</div>
+        <div class="window-controls">
+            <button class="window-btn minimize">_</button>
+            <button class="window-btn maximize">□</button>
+            <button class="window-btn close">✕</button>
+        </div>
+    </div>
+
+    <div class="window-content">
+
+        <!-- MAIN LIST -->
+        <div class="scenario-list">
+            <div class="scenario-card" data-scenario="1">
+                <div class="scenario-card-icon">🏫</div>
+                <h3>Scénario 1 : Windows 10</h3>
+                <p>Renouvellement des licences Windows et alternatives.</p>
+                <button>Commencer</button>
+            </div>
+
+            <div class="scenario-card" data-scenario="2">
+                <div class="scenario-card-icon">💻</div>
+                <h3>Scénario 2 : Réemploi</h3>
+                <p>Réutiliser les anciens postes avec Linux.</p>
+                <button>Commencer</button>
+            </div>
+
+            <div class="scenario-card" data-scenario="3">
+                <div class="scenario-card-icon">🌱</div>
+                <h3>Scénario 3 : Sobriété</h3>
+                <p>Réduire l'impact environnemental.</p>
+                <button>Commencer</button>
+            </div>
+        </div>
+
+        <!-- SCENARIO EXECUTION -->
+        <div id="scenario-content" style="display:none;">
+            <div id="scenario-step"></div>
+            <div id="scenario-choices"></div>
+            <div id="scenario-result"></div>
+
+            <button id="scenario-back">Retour</button>
+        </div>
+
+    </div>
+</div>
+
             </div>
         </div>
     </div>
