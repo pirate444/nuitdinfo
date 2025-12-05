@@ -414,43 +414,55 @@
                     </div>
                 </div>
 
-                <div class="window" id="quiz-window" style="display: none;">
-                    <div class="window-header">
-                        <div class="window-title">Quiz NIRD - Testez vos connaissances</div>
-                        <div class="window-controls">
-                            <button class="window-btn minimize">_</button>
-                            <button class="window-btn maximize">□</button>
-                            <button class="window-btn close">✕</button>
-                        </div>
-                    </div>
+<div class="window" id="quiz-window" style="display: none;">
+    <div class="window-header">
+        <div class="window-title">Quiz NIRD - Testez vos connaissances</div>
+        <div class="window-controls">
+            <button class="window-btn minimize">_</button>
+            <button class="window-btn maximize">□</button>
+            <button class="window-btn close">✕</button>
+        </div>
+    </div>
 
-                    <div class="window-content">
-                        <div class="quiz-info">
-                            <div class="quiz-info-item">
-                                <div class="quiz-info-label">Question</div>
-                                <div class="quiz-info-value">
-                                    <span id="current-question">1</span> /
-                                    <span id="total-questions">5</span>
-                                </div>
-                            </div>
-                            <div class="quiz-info-item">
-                                <div class="quiz-info-label">Score</div>
-                                <div class="quiz-info-value" id="quiz-score">0</div>
-                            </div>
-                        </div>
+    <div class="window-content">
 
-                        <div class="quiz-progress">
-                            <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
-                        </div>
-
-                        <h3 id="quiz-question"></h3>
-                        <div id="quiz-answers"></div>
-                        <div id="quiz-feedback"></div>
-
-                        <button id="next-question">Question suivante</button>
-                        <button id="restart-quiz">Recommencer</button>
-                    </div>
+        <!-- TOP INFO BAR -->
+        <div class="quiz-info">
+            <div class="quiz-info-item">
+                <div class="quiz-info-label">Question</div>
+                <div class="quiz-info-value">
+                    <span id="current-question">1</span> /
+                    <span id="total-questions">5</span>
                 </div>
+            </div>
+            <div class="quiz-info-item">
+                <div class="quiz-info-label">Score</div>
+                <div class="quiz-info-value" id="quiz-score">0</div>
+            </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div class="quiz-progress">
+            <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+        </div>
+
+        <!-- QUESTION -->
+        <h3 id="quiz-question"></h3>
+
+        <!-- ANSWERS -->
+        <div id="quiz-answers"></div>
+
+        <!-- FEEDBACK -->
+        <div id="quiz-feedback"></div>
+
+        <!-- BIG TECH ANIMATION -->
+
+        <!-- BUTTONS -->
+        <button id="next-question">Question suivante</button>
+        <button id="restart-quiz">Recommencer</button>
+
+    </div>
+</div>
 
                 <div class="window" id="scenario-window" style="display:none;">
                     <div class="window-header">
