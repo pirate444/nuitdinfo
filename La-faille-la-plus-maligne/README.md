@@ -1,10 +1,10 @@
-# 🎮 NIRD Platform : Le Guide du Hacker Éthique !
+# 🎮 HIKORN Platform : Le Guide du Hacker Éthique !
 
 > **Mission** : Devenir un expert en cybersécurité en s'amusant ! 🚀
 
 ---
 
-## 🎭 L'Histoire : Bienvenue au Village NIRD
+## 🎭 L'Histoire : Bienvenue au Village HIKORN
 
 Il était une fois, un village numérique résistant face aux géants de la tech...
 
@@ -86,7 +86,7 @@ Quand vous accédez à l'ID `3` (l'admin), vous découvrez :
   "username": "admin",
   "role": "admin",
   "secretData": "FLAG{broken_access_control_discovered}",
-  "secretVault": "🔐 Le trésor de NIRD est protégé... ou pas ?"
+  "secretVault": "🔐 Le trésor de HIKORN est protégé... ou pas ?"
 }
 ```
 
@@ -293,7 +293,7 @@ localStorage.setItem('isAdmin', 'true');
 ### 🎉 C'est Amusant Parce Que :
 
 1. **Gamification** : Points, badges, défis !
-2. **Histoire** : Vous êtes le héros du village NIRD
+2. **Histoire** : Vous êtes le héros du village HIKORN
 3. **Interactivité** : Cliquez, explorez, découvrez
 4. **Récompenses** : Débloquez des secrets
 5. **Compétition** : Montez dans le classement
@@ -359,9 +359,9 @@ localStorage.setItem('isAdmin', 'true');
 
 ---
 
-## 🤝 Rejoindre la Communauté NIRD
+## 🤝 Rejoindre la Communauté HIKORN
 
-### Pourquoi NIRD ?
+### Pourquoi HIKORN ?
 
 - 🌱 **Durable** : Prolonger la vie du matériel
 - 🆓 **Libre** : Logiciels open-source
@@ -370,7 +370,7 @@ localStorage.setItem('isAdmin', 'true');
 
 ### Comment Participer ?
 
-1. **Visitez** : [https://nird.forge.apps.education.fr/](https://nird.forge.apps.education.fr/)
+1. **Visitez** : [https://HIKORN.forge.apps.education.fr/](https://HIKORN.forge.apps.education.fr/)
 2. **Partagez** vos ressources
 3. **Contribuez** au code
 4. **Formez** d'autres personnes
@@ -391,7 +391,7 @@ Vous avez :
 1. 🐧 Installer Linux sur un vieux PC
 2. 📚 Partager une ressource libre
 3. 🌱 Calculer votre empreinte carbone numérique
-4. 👥 Convaincre votre établissement de rejoindre NIRD
+4. 👥 Convaincre votre établissement de rejoindre HIKORN
 
 ---
 
@@ -427,7 +427,7 @@ Vous avez :
 2. **Ne JAMAIS** faire confiance au client
 3. **TOUJOURS** vérifier côté serveur
 4. La sécurité, c'est comme les oignons (ça a des couches 🧅)
-5. NIRD, c'est cool 😎
+5. HIKORN, c'est cool 😎
 
 ### Message Final :
 
@@ -445,7 +445,7 @@ Vous avez :
 
 ## 🙏 Remerciements
 
-- **Collectif enseignant NIRD** - Pour l'inspiration
+- **Collectif enseignant HIKORN** - Pour l'inspiration
 - **OWASP** - Pour les connaissances
 - **Vous** - Pour avoir lu jusqu'ici ! 🎉
 
